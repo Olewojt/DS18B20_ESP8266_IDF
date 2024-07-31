@@ -37,6 +37,8 @@ typedef struct {
 /**
  * @brief Configure gpio pins for onewire communication
  * 
+ * Set `custom_config` to NULL for default config.
+ * 
  * @param pin Bus pin
  * @param custom_config Custom gpio config
  * 
@@ -48,6 +50,7 @@ uint8_t onewire_configure_gpio(gpio_num_t pin, gpio_config_t *custom_config);
 /**
  * @brief Initalize onewire bus
  * 
+ * Set `custom_config` to NULL for default config.
  * @warning MUST be called before any other library function!
  * 
  * @param bus Bus handle 

@@ -3,6 +3,10 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 
+static const char* TAG_DS18B20 = "DS18B20";
+static const uint16_t ds18b20_temp_conv_time[] = {94, 188, 375, 750}; // ms
+static const uint16_t ds18b20_resolution_val[] = {0x1F, 0x3F, 0x5F, 0x7F};
+
 uint8_t ds18b20_init(ds18b20_handler_t *device, gpio_num_t pin, ds18b20_temp_res_t resolution)
 {
     if (!device)
@@ -12,7 +16,7 @@ uint8_t ds18b20_init(ds18b20_handler_t *device, gpio_num_t pin, ds18b20_temp_res
         return 0;
     }
 
-    if (!onewire_init(&device->bus, pin))
+    if (!onewire_init(&device->bus, pin, NULL))
     {
         ESP_LOGW(TAG_DS18B20, "Failed to initialize onewire bus");
 
@@ -94,7 +98,6 @@ void ds18b20_print_scratchpad(ds18b20_handler_t *device)
 
 float ds18b20_read_temp(ds18b20_handler_t *device)
 {
-    ds18b20_convert_temp(device);
     ds18b20_read_scratchpad(device);
 
     uint8_t sign = 0x0;
